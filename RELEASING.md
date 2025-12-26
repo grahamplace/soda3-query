@@ -12,6 +12,13 @@ We follow [Semantic Versioning](https://semver.org/) (SemVer):
 
 ## Release Workflow
 
+**Important:** Before using the automated release workflow, ensure your repository settings allow GitHub Actions to create pull requests:
+
+1. Go to Repository Settings → Actions → General
+2. Under "Workflow permissions", select "Read and write permissions"
+3. Check "Allow GitHub Actions to create and approve pull requests"
+4. Click "Save"
+
 ### Option 1: Automated Release (Recommended)
 
 1. **Prepare Release:**
