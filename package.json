@@ -64,7 +64,7 @@
     "format": "prettier . --write",
     "prepare": "husky",
     "prepublishOnly": "npm run lint && npm test",
-    "version": "npm run build && git add dist",
+    "version": "npm run build",
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
