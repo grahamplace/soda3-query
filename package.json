@@ -59,7 +59,7 @@
     "test:coverage:watch": "vitest --coverage",
     "test:live-integration": "ENABLE_REAL_API_TESTS=true vitest run",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-pattern 'dist/**'",
     "lint-staged": "lint-staged",
     "format": "prettier . --write",
     "prepare": "husky",
