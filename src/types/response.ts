@@ -25,4 +25,3 @@ export interface ColumnMetadata {
   description?: string;
   [key: string]: unknown;
 }
-

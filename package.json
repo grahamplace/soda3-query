@@ -37,6 +37,19 @@
   "engines": {
     "node": ">=18"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -47,8 +60,9 @@
     "test:live-integration": "ENABLE_REAL_API_TESTS=true vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
+    "lint-staged": "lint-staged",
     "format": "prettier . --write",
-    "prepare": "npm run build",
+    "prepare": "husky",
     "prepublishOnly": "npm run lint && npm test",
     "version": "npm run build && git add dist",
     "postversion": "git push && git push --tags"
@@ -58,6 +72,8 @@
     "@types/node": "^24.10.1",
     "@vitest/coverage-istanbul": "^4.0.16",
     "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "nock": "^13.5.5",
     "prettier": "^3.6.2",
     "tsup": "^8.5.1",

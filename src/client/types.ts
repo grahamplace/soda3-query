@@ -15,4 +15,3 @@ export interface SodaClientState {
   appToken?: string;
   timeout?: number;
 }
-

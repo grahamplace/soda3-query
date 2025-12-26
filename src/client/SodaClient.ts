@@ -149,6 +149,7 @@ export class SodaClient {
    */
   private buildMetadataUrl(resourceId: string): string {
     const domain = this.state.domain.replace(/^https?:\/\//, '');
+
     return `https://${domain}/api/views/${resourceId}.json`;
   }
 

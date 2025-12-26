@@ -24,12 +24,6 @@ export default defineConfig({
       },
     },
     // Exclude live integration tests from coverage (they're opt-in)
-    exclude: [
-      'node_modules',
-      'dist',
-      '**/live-integration.test.ts',
-      '**/multi-city-live.test.ts',
-    ],
+    exclude: ['node_modules', 'dist', '**/live-integration.test.ts', '**/multi-city-live.test.ts'],
   },
 });
-

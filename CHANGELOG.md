@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial release of soda3-query package
 - Query builder pattern for constructing SoQL queries
 - Support for SELECT, WHERE, ORDER BY, GROUP BY, HAVING, LIMIT, OFFSET clauses
@@ -28,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-01-XX
 
 ### Added
+
 - Initial release
 
 [Unreleased]: https://github.com/grahamplace/soda3-query/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/grahamplace/soda3-query/releases/tag/v0.1.0
-
