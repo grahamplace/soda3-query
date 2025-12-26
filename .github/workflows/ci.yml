@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  # Fast feedback: unit tests, linting, type checking
+  test:
+    name: Unit Tests & Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:coverage
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # Optional: only upload if token is set
+          upload: ${{ secrets.CODECOV_TOKEN != '' }}
+
+  # Live integration tests - only on main branch merges
+  # These are slower and subject to rate limits, so we run them
+  # only after code is merged to main, not on every PR
+  live-integration-tests:
+    name: Live Integration Tests
+    runs-on: ubuntu-latest
+    # Only run on pushes to main (after PR merge), not on PRs themselves
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test:live-integration
+        env:
+          ENABLE_REAL_API_TESTS: 'true'

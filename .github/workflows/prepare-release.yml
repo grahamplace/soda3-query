@@ -1,0 +1,112 @@
+name: Prepare Release
+
+# Manual workflow to prepare a release
+# This creates a release branch, updates version, and creates a PR
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type (major, minor, patch)'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Get current version and calculate new version
+      - name: Calculate new version
+        id: version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
+
+          case "${{ inputs.version_type }}" in
+            major)
+              NEW_MAJOR=$((MAJOR + 1))
+              NEW_VERSION="$NEW_MAJOR.0.0"
+              ;;
+            minor)
+              NEW_MINOR=$((MINOR + 1))
+              NEW_VERSION="$MAJOR.$NEW_MINOR.0"
+              ;;
+            patch)
+              NEW_PATCH=$((PATCH + 1))
+              NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+              ;;
+          esac
+
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Current: $CURRENT_VERSION -> New: $NEW_VERSION"
+
+      # Create release branch
+      - name: Create release branch
+        run: |
+          BRANCH_NAME="release/v${{ steps.version.outputs.new_version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b $BRANCH_NAME
+          echo "Created branch: $BRANCH_NAME"
+
+      # Update version in package.json
+      - name: Update version
+        run: |
+          npm version ${{ steps.version.outputs.new_version }} --no-git-tag-version
+          git add package.json
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
+
+      # Create PR
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/v${{ steps.version.outputs.new_version }}
+          title: 'Release v${{ steps.version.outputs.new_version }}'
+          body: |
+            ## Release v${{ steps.version.outputs.new_version }}
+
+            This PR prepares the release of version **${{ steps.version.outputs.new_version }}**.
+
+            ### Version Type: ${{ inputs.version_type }}
+            - Previous version: ${{ steps.version.outputs.current_version }}
+            - New version: ${{ steps.version.outputs.new_version }}
+
+            ### Next Steps:
+            1. Review and merge this PR
+            2. After merge, create a tag: `git tag v${{ steps.version.outputs.new_version }}`
+            3. Push the tag: `git push origin v${{ steps.version.outputs.new_version }}`
+            4. The release workflow will automatically publish to npm and create a GitHub release
+
+            ### Checklist:
+            - [ ] Update CHANGELOG.md with changes
+            - [ ] Review all changes
+            - [ ] Ensure all tests pass
+            - [ ] Ready to release
+          labels: |
+            release
+          draft: false

@@ -1,0 +1,25 @@
+name: Scheduled Live Integration Tests
+
+# Run live tests on a schedule to catch API changes/regressions
+# This is optional but recommended to catch issues from external API changes
+on:
+  schedule:
+    # Run daily at 2 AM UTC (adjust timezone as needed)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  live-integration-tests:
+    name: Scheduled Live Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test:live-integration
+        env:
+          ENABLE_REAL_API_TESTS: 'true'
+
