@@ -1,8 +1,5 @@
-export interface HelloOptions {
-  loud?: boolean;
-}
-
-export function hello(name: string, options: HelloOptions = {}): string {
-  const base = `Hello, ${name}`;
-  return options.loud ? base.toUpperCase() + "!" : base + "!";
-}
+export { SodaClient } from "./client/SodaClient";
+export { QueryBuilder } from "./builder/QueryBuilder";
+export type { SodaClientOptions } from "./client/types";
+export type { SoQLQueryParams, ComparisonOperator, OrderDirection, WhereValue } from "./types/query";
+export type { SodaResponse, ResourceMetadata, ColumnMetadata } from "./types/response";
