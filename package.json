@@ -65,7 +65,7 @@
     "prepare": "husky",
     "prepublishOnly": "npm run lint && npm test",
     "version": "npm run build",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push --tags || true"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

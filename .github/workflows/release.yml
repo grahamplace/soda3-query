@@ -58,7 +58,7 @@ jobs:
       # Update package.json version
       - name: Update version in package.json
         run: |
-          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version --ignore-scripts
           cat package.json | grep version
 
       # Publish to npm using trusted publishing
