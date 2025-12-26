@@ -85,6 +85,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
           branch: release/v${{ steps.version.outputs.new_version }}
           title: 'Release v${{ steps.version.outputs.new_version }}'
           body: |
