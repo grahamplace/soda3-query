@@ -69,29 +69,7 @@ jobs:
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "Current: $CURRENT_VERSION -> New: $NEW_VERSION"
 
-      # Create release branch (delete if exists from previous failed run)
-      - name: Create release branch
-        run: |
-          BRANCH_NAME="release/v${{ steps.version.outputs.new_version }}"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Check if branch exists remotely and delete it if it does
-          if git ls-remote --heads origin $BRANCH_NAME | grep -q $BRANCH_NAME; then
-            echo "Branch $BRANCH_NAME exists remotely, deleting it..."
-            git push origin --delete $BRANCH_NAME || true
-          fi
-
-          # Check if branch exists locally and delete it if it does
-          if git show-ref --verify --quiet refs/heads/$BRANCH_NAME; then
-            echo "Branch $BRANCH_NAME exists locally, deleting it..."
-            git branch -D $BRANCH_NAME || true
-          fi
-
-          git checkout -b $BRANCH_NAME
-          echo "Created branch: $BRANCH_NAME"
-
-      # Update version in package.json
+      # Update version in package.json (will be committed by create-pull-request)
       - name: Update version
         run: |
           echo "Updating version to ${{ steps.version.outputs.new_version }}"
@@ -99,15 +77,14 @@ jobs:
           echo "Verifying version update:"
           cat package.json | grep '"version"'
           git status
-          git add package.json package-lock.json
-          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
 
-      # Push the release branch
-      - name: Push release branch
+      # Configure git (needed for create-pull-request action)
+      - name: Configure git
         run: |
-          git push -u origin release/v${{ steps.version.outputs.new_version }}
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # Create PR
+      # Create PR (this action will create the branch, commit changes, and open PR)
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
@@ -115,6 +92,7 @@ jobs:
           base: main
           branch: release/v${{ steps.version.outputs.new_version }}
           delete-branch: false
+          commit-message: 'chore: bump version to ${{ steps.version.outputs.new_version }}'
           title: 'Release v${{ steps.version.outputs.new_version }}'
           body: |
             ## Release v${{ steps.version.outputs.new_version }}
