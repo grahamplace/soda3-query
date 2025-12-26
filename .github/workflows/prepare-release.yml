@@ -27,6 +27,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          ref: main
 
       - uses: actions/setup-node@v4
         with:
@@ -39,6 +40,9 @@ jobs:
       - name: Calculate new version
         id: version
         run: |
+          echo "Current branch: $(git branch --show-current)"
+          echo "Reading version from package.json:"
+          cat package.json | grep '"version"' | head -1
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
@@ -90,8 +94,12 @@ jobs:
       # Update version in package.json
       - name: Update version
         run: |
-          npm version ${{ steps.version.outputs.new_version }} --no-git-tag-version
-          git add package.json
+          echo "Updating version to ${{ steps.version.outputs.new_version }}"
+          npm version ${{ steps.version.outputs.new_version }} --no-git-tag-version --ignore-scripts
+          echo "Verifying version update:"
+          cat package.json | grep '"version"'
+          git status
+          git add package.json package-lock.json
           git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
 
       # Push the release branch
