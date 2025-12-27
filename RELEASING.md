@@ -93,7 +93,7 @@ We follow [Semantic Versioning](https://semver.org/) (SemVer):
    - Enable 2FA for security
 
 2. **Authentication:**
-   - For automated publishing: Trusted publishing (OIDC) is configured
+   - For automated publishing: Uses OIDC trusted publishing (configured in npm account)
    - For manual publishing: Run `npm login` locally
 
 3. **Package Name:**
@@ -102,13 +102,24 @@ We follow [Semantic Versioning](https://semver.org/) (SemVer):
 
 ### Automated Publishing (GitHub Actions)
 
-The release workflow uses **trusted publishing** (OIDC) which:
+The release workflow uses **OIDC trusted publishing** which:
 
 - Eliminates need for long-lived npm tokens
 - Uses short-lived, cryptographically-signed tokens
 - More secure than traditional token-based auth
 
-**Trusted publishing is already configured** - the workflow will automatically authenticate when publishing.
+**To set up OIDC trusted publishing:**
+
+1. Go to https://www.npmjs.com/settings/YOUR_USERNAME/tokens
+2. Click "Trusted Publishing" tab
+3. Click "Add Trusted Publisher"
+4. Select "GitHub Actions"
+5. Enter your repository: `grahamplace/soda3-query`
+6. Enter workflow file: `.github/workflows/release.yml`
+7. **Environment name:** Leave blank (not needed unless using protected environments)
+8. Click "Add"
+
+**Note:** The workflow automatically upgrades npm to 11.5.1+ (required for OIDC support). No `NPM_TOKEN` secret is needed - npm automatically uses the OIDC token from GitHub Actions.
 
 ### Manual Publishing
 
