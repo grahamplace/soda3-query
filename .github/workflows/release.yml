@@ -68,13 +68,9 @@ jobs:
           fi
           echo "Version verification passed"
 
-      # Publish to npm using trusted publishing
+      # Publish to npm using trusted publishing (OIDC)
       - name: Publish to npm
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # Note: With trusted publishing, NPM_TOKEN may not be needed
-          # but keeping it as fallback for older npm versions
 
       # Create GitHub Release
       - name: Create GitHub Release

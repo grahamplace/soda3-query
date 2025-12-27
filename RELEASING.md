@@ -93,7 +93,7 @@ We follow [Semantic Versioning](https://semver.org/) (SemVer):
    - Enable 2FA for security
 
 2. **Authentication:**
-   - For automated publishing: Set up trusted publishing (OIDC) in GitHub Actions
+   - For automated publishing: Trusted publishing (OIDC) is configured
    - For manual publishing: Run `npm login` locally
 
 3. **Package Name:**
@@ -108,11 +108,7 @@ The release workflow uses **trusted publishing** (OIDC) which:
 - Uses short-lived, cryptographically-signed tokens
 - More secure than traditional token-based auth
 
-To enable:
-
-1. Go to npm → Access Tokens → Automation
-2. Enable "Trusted Publishing" for your GitHub repository
-3. The workflow will automatically authenticate
+**Trusted publishing is already configured** - the workflow will automatically authenticate when publishing.
 
 ### Manual Publishing
 
