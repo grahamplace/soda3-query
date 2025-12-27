@@ -1,6 +1,6 @@
 {
   "name": "soda3-query",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "SODA (Socrata) query client for NodeJS. Compatible with SODA 3",
   "author": "Graham Place <grahamplace.work@gmail.com>",
   "repository": {
