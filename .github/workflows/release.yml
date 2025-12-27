@@ -55,11 +55,18 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Extracted version: $VERSION"
 
-      # Update package.json version
-      - name: Update version in package.json
+      # Verify package.json version matches tag
+      - name: Verify version matches tag
         run: |
-          npm version ${{ steps.version.outputs.version }} --no-git-tag-version --ignore-scripts
-          cat package.json | grep version
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          EXPECTED_VERSION="${{ steps.version.outputs.version }}"
+          echo "Package.json version: $CURRENT_VERSION"
+          echo "Tag version: $EXPECTED_VERSION"
+          if [ "$CURRENT_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "Error: package.json version ($CURRENT_VERSION) does not match tag version ($EXPECTED_VERSION)"
+            exit 1
+          fi
+          echo "Version verification passed"
 
       # Publish to npm using trusted publishing
       - name: Publish to npm
