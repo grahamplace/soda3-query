@@ -8,4 +8,9 @@ export default defineConfig({
   clean: true,
   target: 'node18',
   outDir: 'dist',
+  outExtension({ format }) {
+    return {
+      js: format === 'cjs' ? '.cjs' : '.mjs',
+    };
+  },
 });
