@@ -42,7 +42,8 @@ jobs:
           node-version: '18'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
-          # Use trusted publishing (OIDC) - no token needed!
+          # For OIDC trusted publishing, no NODE_AUTH_TOKEN is needed
+          # npm will automatically use the OIDC token from GitHub Actions
 
       - run: npm ci
       - run: npm run build
@@ -67,6 +68,15 @@ jobs:
             exit 1
           fi
           echo "Version verification passed"
+
+      # Verify OIDC token is available (for debugging)
+      - name: Verify OIDC setup
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "OIDC token available: $([ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ] && echo "yes" || echo "no")"
+          # Check if npm can authenticate
+          npm whoami 2>&1 || echo "Note: npm whoami may fail before publish, this is normal for OIDC"
 
       # Publish to npm using trusted publishing (OIDC)
       - name: Publish to npm
