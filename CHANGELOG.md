@@ -9,13 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial release of soda3-query package
-- Query builder pattern for constructing SoQL queries
-- Support for SELECT, WHERE, ORDER BY, GROUP BY, HAVING, LIMIT, OFFSET clauses
-- Comprehensive unit and integration tests
-- Live integration tests across 7 major cities (SF, Chicago, Seattle, LA, Dallas, Austin, NYC)
-- TypeScript support with full type definitions
-
 ### Changed
 
 ### Deprecated
@@ -26,11 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [0.1.0] - 2025-01-XX
+## [0.8.1] - 2025-12-26
 
 ### Added
 
-- Initial release
+- Initial release of soda3-query package
+- Query builder pattern for constructing SoQL queries
+- Support for SELECT, WHERE, ORDER BY, GROUP BY, HAVING, LIMIT, OFFSET clauses
+- Comprehensive unit and integration tests
+- Live integration tests across 7 major cities (SF, Chicago, Seattle, LA, Dallas, Austin, NYC)
+- TypeScript support with full type definitions
 
-[Unreleased]: https://github.com/grahamplace/soda3-query/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/grahamplace/soda3-query/releases/tag/v0.1.0
+[Unreleased]: https://github.com/grahamplace/soda3-query/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/grahamplace/soda3-query/releases/tag/v0.8.1

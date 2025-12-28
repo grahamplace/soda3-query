@@ -38,6 +38,7 @@ The library is a TypeScript ESM package built with `tsup`.
 - The repo does not enforce a strict commit format; keep messages short and imperative (e.g., `Add query validation`).
 - PRs should include a clear summary, relevant test results (`npm test`, `npm run typecheck`), and any API changes noted in the description.
 - If behavior changes, add or update tests under `test/unit/` or `test/integration/`.
+- **Keep `CHANGELOG.md` updated**: When making changes that affect users (new features, bug fixes, breaking changes, etc.), add entries to the `[Unreleased]` section under the appropriate category (Added, Changed, Fixed, etc.). Follow the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
 
 ## Configuration Notes
 
